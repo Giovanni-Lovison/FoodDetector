@@ -3,14 +3,12 @@ import torch
 import torchvision.transforms as transforms
 import torchvision.models as models
 from PIL import Image
+from torchvision.datasets import ImageFolder
 
 
-# Configurazioni
 MODEL_PATH = "student_distilled_fp32.pth"
 DATASET_PATH = "dataset"
 
-
-# Preprocessing (come test_loader)
 test_transform = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),
@@ -20,13 +18,9 @@ test_transform = transforms.Compose([
 ])
 
 
-# Caricamento classi dal dataset
-from torchvision.datasets import ImageFolder
 dataset = ImageFolder(DATASET_PATH)
 class_names = dataset.classes
 
-
-# Carica modello FP32 su CPU
 device = torch.device("cpu")
 model = models.mobilenet_v2(weights=None, num_classes=len(class_names))
 state_dict = torch.load(MODEL_PATH, map_location=device)
